@@ -1,0 +1,9 @@
+# file      : tests/regression/testscript
+# license   : MIT; see accompanying COPYING file
+
+: check
+:
+$* >>~/EOE/
+  /Expat version: expat_\d+.\d+.\d+/d
+  /100%: Checks: .+, Failed: 0/
+  EOE

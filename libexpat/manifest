@@ -1,0 +1,18 @@
+: 1
+name: libexpat
+version: 2.1.0-a.0.z
+project: expat
+summary: Stream-oriented XML parsing C library
+license: MIT
+topics: Expat, C, XML parser, streaming
+description-file: README
+url: https://libexpat.github.io/
+doc-url: https://libexpat.github.io/doc/
+src-url: https://git.build2.org/cgit/packaging/expat/expat/tree/libexpat/
+package-url: https://git.build2.org/cgit/packaging/expat/
+email: packaging@build2.org ; Report issues at https://github.com/libexpat/libexpat/issues.
+package-email: packaging@build2.org ; Mailing list.
+build-warning-email: builds@build2.org
+builds: all
+depends: * build2 >= 0.13.0
+depends: * bpkg >= 0.13.0

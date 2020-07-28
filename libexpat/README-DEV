@@ -1,0 +1,18 @@
+This document describes how libexpat was packaged for build2. In particular,
+this understanding will be useful when upgrading to a new upstream version.
+See ../README-DEV for general notes on Expat packaging.
+
+Symlink the required upstream files:
+
+$ ln -s ../COPYING
+$ pushd libexpat
+$ ln -s ../../upstream/expat/lib/*.{c,h} ./
+$ rm watcomconfig.h winconfig.h
+$ ln -s ../../upstream/expat/lib/libexpat.def libexpat.def.orig
+$ popd
+
+Use some of the upstream's tests for testing:
+
+$ pushd tests/regression/
+$ ln -s ../../../upstream/expat/tests/*.{c,h} ./
+$ popd

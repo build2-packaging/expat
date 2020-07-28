@@ -1,0 +1,6 @@
+# file      : tests/basic/testscript
+# license   : MIT; see accompanying COPYING file
+
+: version
+:
+$* >~'%version: \d+.\d+.\d+%d'

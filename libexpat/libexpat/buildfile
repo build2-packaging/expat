@@ -1,0 +1,79 @@
+# file      : libexpat/buildfile
+# license   : MIT; see accompanying COPYING file
+
+# xmltok_{impl,nc}.c files are included into xmltok.c, so exclude them from
+# the compilation.
+#
+lib{expat}: h{*} c{* -xmltok_impl -xmltok_ns}
+lib{expat}: c{xmltok_impl xmltok_ns}: include = false
+
+tclass = $c.target.class
+
+windows = ($tclass == 'windows')
+
+# Symbol exporting on Windows is done via the .def file.
+#
+libs{expat}: def{libexpat}: include = $windows
+def{libexpat}: file{libexpat.def.orig}
+{{
+  # Remove the 'LIBRARY' line from the .def file to make it acceptable for the
+  # MinGW linker.
+  #
+  sed -e 's/^\s*LIBRARY\s*$//' $path($<) >$path($>)
+}}
+
+# Build options.
+#
+c.poptions += -DHAVE_EXPAT_CONFIG_H
+c.poptions =+ "-I$src_base"
+
+if ($c.class == 'gcc')
+{
+  # Note that it's unlikely that the code is strict aliasing-safe, given that
+  # the -fno-strict-aliasing option is added in the later library versions.
+  # Let's also add this option for good measure.
+  #
+  c.coptions += -fexceptions -fno-strict-aliasing
+
+  # Disable warnings that pop up with -Wall -Wextra.
+  #
+  # Note that -Wno-implicit-fallthrough is only supported starting from GCC 7
+  # and Clang 3.9. However, we don't check for the compiler version since the
+  # earlier compiler versions do not complain about unknown -Wno-* options,
+  # unless some other diagnostics is issued.
+  #
+  # Also note that these warnings can be build2-specific due to the
+  # intermediate translation unit pre-processing phase, which wipes the `fall
+  # through` comments from the macro definitions.
+  #
+  c.coptions += -Wno-implicit-fallthrough
+}
+
+switch $tclass
+{
+  case 'linux' | 'bsd'
+  {
+    # Make sure all symbols are resolvable.
+    #
+    c.loptions += -Wl,--no-undefined
+  }
+}
+
+# Export options.
+#
+lib{expat}:  cc.export.poptions  = "-I$src_base"
+liba{expat}: cc.export.poptions += -DXML_STATIC
+
+# See bootstrap.build for details.
+#
+if $version.pre_release
+  lib{expat}: bin.lib.version = @"-$version.project_id"
+else
+  lib{expat}: bin.lib.version = @"-$abi_version_major" linux@"$abi_version"
+
+# Install the bare minimum of headers (note: not recreating subdirectories).
+#
+h{*}: install = false
+
+for h: expat expat_external expat_config
+  h{$h}@./: install = include/

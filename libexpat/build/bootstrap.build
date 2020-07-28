@@ -1,0 +1,28 @@
+# file      : build/bootstrap.build
+# license   : MIT; see accompanying COPYING file
+
+project = libexpat
+
+using version
+using config
+using dist
+using test
+using install
+
+# The Expat version has the <major>.<minor>.<micro> form and follows the
+# semver semantics, according to the documentation in expat/lib/expat.h
+# present in the latest library version (2.2.9 at the time of this writing).
+#
+# The ABI version doesn't correlate with the release version and is assigned
+# via the libtool's -version-info <current>:<revision>:<age> option
+# (LIBCURRENT, LIBREVISION, and LIBAGE in expat/configure.in). As it follows
+# from the comment in expat/configure.in, the major version (current - age) is
+# incremented for backwards-incompatible ABI changes.
+#
+if ($version.major == 2 && $version.minor == 1 && $version.patch == 0)
+{
+  abi_version_major = 1
+  abi_version = "$abi_version_major.6.0" # <current - age>.<age>.<revision>
+}
+else
+  fail 'increment the ABI version?'
