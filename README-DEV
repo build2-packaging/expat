@@ -1,0 +1,82 @@
+This document describes an approach applied to packaging Expat for build2. In
+particular, this understanding will be useful when upgrading to a new upstream
+version.
+
+The upstream package contains the libexpat C library, its usage examples and
+tests, and xmlwf utility. Currently, we only package the library (see
+libexpat/README-DEV for details).
+
+We add the upstream package as a git submodule and symlink the required files
+and subdirectories into the build2 package subdirectories. Then, when required,
+we "overlay" the upstream with our own headers, placing them into the library
+directory.
+
+Note that symlinking upstream submodule subdirectories into a build2 package
+subdirectory results in creating intermediate build files (.d, .o, etc) inside
+upstream directory while building the package in source tree. That's why we
+need to make sure that packages do not share upstream source files via
+subdirectory symlinks, not to also share the related intermediate files. If
+several packages need to compile the same upstream source file, then only one
+of them can symlink it via the parent directory while others must symlink it
+directly. We also add the `ignore = untracked` configuration option into
+.gitmodules to make sure that git ignores the intermediate build files under
+upstream/ subdirectory.
+
+The upstream package can be configured to contain a specific feature set. We
+reproduce the union of features configured for the upstream source package in
+Debian and Fedora distributions. The configuration options defining these sets
+are specified in the Debian's rules and Fedora's RPM .spec files. These files
+can be obtained as follows:
+
+$ wget http://deb.debian.org/debian/pool/main/e/expat/expat_2.2.9-1.debian.tar.xz
+$ tar xf expat_2.2.9-1.debian.tar.xz debian/rules
+
+$ wget https://kojipkgs.fedoraproject.org//packages/expat/2.2.8/1.fc32/src/expat-2.2.8-1.fc32.src.rpm
+$ rpm2cpio expat-2.2.8-1.fc32.src.rpm | cpio -civ '*.spec'
+
+As a side note, on Debian and Fedora the source, libraries, and headers are
+packaged as follows:
+
+                src   libraries headers
+Debian/Ubuntu:  expat libexpat1 libexpat1-dev
+Fedora/RHEL:    expat expat     expat-devel
+
+Search for the Debian and Fedora packages at https://packages.debian.org/search
+and https://apps.fedoraproject.org/packages/.
+
+Both distributions use the default feature set and specify no additional
+configuration options for the configure script.
+
+Normally, when packaging a project, we need to replace some auto-generated
+headers with our own implementations and deduce the source files and
+compilation/linking options. For Expat we can rely for that on configure.ac,
+expat_config.h.cmake and CMakeLists.txt. In practice, however, that can be
+uneasy and error prone, so you may also need to see the actual compiler and
+linker command lines in the build log. If that's the case, you can
+configure/build the upstream package on the platform of interest running the
+following commands in the upstream project root directory.
+
+On POSIX and for MinGW GCC:
+
+$ cd expat
+$ ./buildconf.sh
+$ mkdir build
+$ cd build
+$ ../configure >build.log 2>&1
+$ make VERBOSE=1 >>build.log 2>&1
+
+For MSVC:
+
+> cd expat
+> mkdir build
+> cd build
+> cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .. >build.log
+> cmake --build . >>build.log 2>&1
+
+See upstream/expat/{README.md,CMake.README,win32/README.txt} for details.
+
+When the packaging is complete, build all the project packages in source tree
+and make sure that no Expat headers are included from the system, running the
+following command from the project root:
+
+$ grep -a -e '/usr/include/expat.*' `find . -type f -name '*.d'`

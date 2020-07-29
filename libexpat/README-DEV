@@ -1,0 +1,44 @@
+This document describes how libexpat was packaged for build2. In particular,
+this understanding will be useful when upgrading to a new upstream version.
+See ../README-DEV for general notes on Expat packaging.
+
+Symlink the required upstream files:
+
+$ ln -s ../COPYING
+$ pushd libexpat
+$ ln -s ../../upstream/expat/lib/{*.{c,h},libexpat.def} ./
+$ ln -s ../../upstream/expat/expat_config.h.cmake expat_config.h.cmake.orig
+$ popd
+
+Use some of the upstream's tests for testing:
+
+$ pushd tests/regression/
+$ ln -s ../../../upstream/expat/tests/*.{c,h} ./
+$ ln -s ../../../upstream/expat/lib/{internal,siphash,ascii}.h ./
+$ popd
+
+Create libexpat/expat_config.h using as a base the upstream's auto-generated
+header, winconfig.h, and/or configure.ac.
+
+Re-creating libexpat/expat_config.h from scratch every time we upgrade to a
+new upstream version would be a pain. Instead we can only (un)define the newly
+introduced macros, comparing the already defined and currently used macro
+sets. Note that we can use this approach to also deduce the initial set of
+macros running the above commands for the upstream's auto-generated
+expat_config.h:
+
+$ ln -s ../../upstream/expat/expat_config.h.cmake libexpat/expat_config.h.cmake.orig
+
+$ for m in `cat libexpat/expat_config.h.cmake.orig libexpat/winconfig.h.orig | \
+            sed -n 's/.*#\s*\(define\|cmakedefine\)\s\{1,\}\([_a-zA-Z0-9]\{1,\}\)\(\s.*\)\{0,1\}$/\2/p' | sort -u`; do
+    if grep -q -e "\b$m\b" `find -L . -type f -not -path "./tests/*" -a \( -name '*.h' -a ! -name expat_config.h -o -name '*.c' \)`; then
+      echo "$m"
+    fi
+  done >used-macros
+
+$ cat libexpat/expat_config.h | \
+  sed -n 's/^#\s*\(define\|undef\)\s\{1,\}\([_a-z_A-Z0-9]\{1,\}\)\(\s.*\)\{0,1\}$/\2/p' | \
+  sort -u >defined-macros
+
+$ diff defined-macros used-macros | grep '<' >remove-macros
+$ diff defined-macros used-macros | grep '>' >add-macros

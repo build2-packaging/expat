@@ -1,0 +1,8 @@
+# file      : tests/build/bootstrap.build
+# license   : MIT; see accompanying COPYING file
+
+project = # Unnamed tests subproject.
+
+using config
+using test
+using dist
