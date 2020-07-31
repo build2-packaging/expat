@@ -1,6 +1,6 @@
 : 1
 name: libexpat
-version: 2.2.9-a.0.z
+version: 2.2.9
 project: expat
 summary: Stream-oriented XML parsing C library
 license: MIT
