@@ -1,0 +1,9 @@
+# file      : unit-tests/regression/buildfile
+# license   : MIT; see accompanying COPYING file
+
+include ../../libexpat/
+
+c.poptions += -DXML_BUILDING_EXPAT
+c.poptions =+ "-I$src_root/libexpat"
+
+exe{driver}: {h c}{**} ../../libexpat/libue{expat} testscript

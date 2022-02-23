@@ -5,10 +5,6 @@
 #ifndef LIBEXPAT_EXPAT_CONFIG_H
 #define LIBEXPAT_EXPAT_CONFIG_H
 
-/* Note that on Windows the library source files include winconfig.h that
- * includes this header, additionally adding the Windows-specific definitions.
- */
-
 /* Endianess.
  */
 #ifdef __FreeBSD__

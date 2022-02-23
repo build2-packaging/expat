@@ -1,6 +1,0 @@
-# file      : tests/regression/buildfile
-# license   : MIT; see accompanying COPYING file
-
-import libs = libexpat%lib{expat}
-
-exe{driver}: {h c}{**} $libs testscript
