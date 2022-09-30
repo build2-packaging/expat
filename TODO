@@ -1,0 +1,13 @@
+On the revision:
+
+On the release:
+
+- Switch to using in.substitutions in buildfile.
+
+Note: the above requires bumping build2 version requirement to 0.16.0.
+
+Additional (permanent) notes:
+
+- Review '@@ TMP' notes.
+
+- Add/remove 'priority: security' manifest value, if required.

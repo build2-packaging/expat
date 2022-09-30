@@ -28,11 +28,11 @@ Debian and Fedora distributions. The configuration options defining these sets
 are specified in the Debian's rules and Fedora's RPM .spec files. These files
 can be obtained as follows:
 
-$ wget http://deb.debian.org/debian/pool/main/e/expat/expat_2.2.9-1.debian.tar.xz
-$ tar xf expat_2.2.9-1.debian.tar.xz debian/rules
+$ wget http://deb.debian.org/debian/pool/main/e/expat/expat_2.4.9-1.debian.tar.xz
+$ tar xf expat_2.4.9-1.debian.tar.xz debian/rules
 
-$ wget https://kojipkgs.fedoraproject.org//packages/expat/2.2.8/1.fc32/src/expat-2.2.8-1.fc32.src.rpm
-$ rpm2cpio expat-2.2.8-1.fc32.src.rpm | cpio -civ '*.spec'
+$ wget https://kojipkgs.fedoraproject.org//packages/expat/2.4.9/1.fc38/src/expat-2.4.9-1.fc38.src.rpm
+$ rpm2cpio expat-2.4.9-1.fc38.src.rpm | cpio -civ '*.spec'
 
 As a side note, on Debian and Fedora the source, libraries, and headers are
 packaged as follows:

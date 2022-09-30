@@ -6,9 +6,23 @@ Symlink the required upstream files:
 
 $ ln -s ../COPYING
 $ pushd libexpat
-$ ln -s ../../upstream/expat/lib/{*.{c,h},libexpat.def} ./
+$ ln -s ../../upstream/expat/lib/{*.{c,h},libexpat.def.cmake} ./
 $ ln -s ../../upstream/expat/expat_config.h.cmake expat_config.h.cmake.orig
 $ popd
+
+@@ TMP Note that the in module can't be used directly for libexpat.def.cmake
+       since the substitution variables we need to use start with the
+       underscore character, which ends up with the following error:
+
+       buildfile:28:3: error: variable name '_EXPAT_COMMENT_ATTR_INFO' is reserved
+         info: variable name starts with underscore
+
+       This can be fixed when the build2 version 0.16.0 is released, which
+       introduces the in.substitutions variable, which can be set to the list
+       of substitutions (key-value pairs).
+
+       For now we just copy libexpat.def.cmake to libexpat.def.in and patch it
+       manually, removing the leading underscores.
 
 Use some of the upstream's tests for testing:
 

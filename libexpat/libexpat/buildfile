@@ -21,6 +21,19 @@ msvc_runtime = ($c.target.system == 'win32-msvc')
 #
 libs{expat}: def{libexpat}: include = $msvc_runtime
 
+def{libexpat}: in{libexpat}
+{
+  in.symbol = '@'
+
+  # @@ TMP Use the in.substitutions variable instead when build2 0.16.0 is
+  #        released (see README-DEV for details).
+  #
+  in.substitution = lax
+
+  EXPAT_COMMENT_ATTR_INFO = ';'
+  EXPAT_COMMENT_DTD       = ' '
+}
+
 # Build options.
 #
 c.poptions += -DHAVE_EXPAT_CONFIG_H -DXML_BUILDING_EXPAT
