@@ -1,6 +1,6 @@
 : 1
 name: libexpat
-version: 2.5.0-a.0.z
+version: 2.5.0
 project: expat
 priority: security
 summary: Stream-oriented XML parsing C library
