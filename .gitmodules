@@ -1,4 +1,5 @@
 [submodule "upstream"]
 	path = upstream
 	url = https://github.com/boris-kolpackov/libexpat.git
+	branch = 2.1
 	ignore = untracked
