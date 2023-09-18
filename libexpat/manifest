@@ -1,6 +1,6 @@
 : 1
 name: libexpat
-version: 2.5.0
+version: 2.5.0+1
 project: expat
 priority: security
 summary: Stream-oriented XML parsing C library
@@ -17,3 +17,7 @@ build-warning-email: builds@build2.org
 builds: all
 depends: * build2 >= 0.13.0
 depends: * bpkg >= 0.13.0
+
+# System package mapping.
+#
+debian-name: libexpat1-dev
