@@ -1,0 +1,7 @@
+: 1
+name: libexpat
+version: 2.5.0+1
+project: expat
+priority: security
+summary: Stream-oriented XML parsing C library
+license: MIT
