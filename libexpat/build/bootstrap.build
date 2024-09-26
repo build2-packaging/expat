@@ -18,10 +18,10 @@ using install
 # from the comment in expat/configure.ac, the major version (current - age) is
 # incremented for backwards-incompatible ABI changes.
 #
-if ($version.major == 2 && $version.minor == 5 && $version.patch == 0)
+if ($version.major == 2 && $version.minor == 6 && $version.patch == 3)
 {
   abi_version_major = 1
-  abi_version = "$abi_version_major.8.10" # <current - age>.<age>.<revision>
+  abi_version = "$abi_version_major.9.3" # <current - age>.<age>.<revision>
 }
 else
   fail 'increment the ABI version?'

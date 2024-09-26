@@ -2,9 +2,8 @@ On the revision:
 
 On the release:
 
-- Switch to using in.substitutions in buildfile.
-
-Note: the above requires bumping build2 version requirement to 0.16.0.
+  Note that here we record items that require bumping build2 version
+  requirement to the latest released version of the toolchain.
 
 Additional (permanent) notes:
 

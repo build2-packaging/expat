@@ -3,7 +3,7 @@
 
 include ../../libexpat/
 
-c.poptions += -DXML_BUILDING_EXPAT
+c.poptions += -DXML_BUILDING_EXPAT -DXML_TESTING
 c.poptions =+ "-I$src_root/libexpat"
 
 exe{driver}: {h c}{**} ../../libexpat/libue{expat} testscript

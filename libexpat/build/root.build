@@ -3,6 +3,13 @@
 
 using in
 
+# Note that the unit tests use the 'for' loop initial declarations, which may
+# require an explicit specification of C99 standard for older GCC versions
+# (4.9, etc). That's probably ok, since the upstream declares itself in it's
+# README.md as a 'C99 library for parsing XML'.
+#
+c.std = 99
+
 using c
 
 h{*}: extension = h

@@ -7,7 +7,7 @@ lib{expat}: libul{expat}
 # the compilation.
 #
 {libul libue}{expat}: h{*} c{* -xmltok_impl -xmltok_ns}
-{libul libue}{expat}: c{xmltok_impl xmltok_ns}: include = false
+{libul libue}{expat}: c{xmltok_impl xmltok_ns}: include = adhoc
 
 tclass = $c.target.class
 
@@ -21,27 +21,35 @@ msvc_runtime = ($c.target.system == 'win32-msvc')
 #
 libs{expat}: def{libexpat}: include = $msvc_runtime
 
-def{libexpat}: in{libexpat}
+def{libexpat}: in{libexpat.def.cmake}
 {
   in.symbol = '@'
-
-  # @@ TMP Use the in.substitutions variable instead when build2 0.16.0 is
-  #        released (see README-DEV for details).
-  #
   in.substitution = lax
-
-  EXPAT_COMMENT_ATTR_INFO = ';'
-  EXPAT_COMMENT_DTD       = ' '
+  in.substitutions = _EXPAT_COMMENT_ATTR_INFO@';' _EXPAT_COMMENT_DTD_OR_GE@' '
 }
 
 # Build options.
 #
-c.poptions += -DHAVE_EXPAT_CONFIG_H -DXML_BUILDING_EXPAT
+# Note that for unit testing upstream rebuilds the shared library as static
+# and defining the XML_TESTING macro. Being defined, this macro introduces
+# some counters and enables direct modification of some global internal
+# variables by unit tests. That, however, doesn't change the public API and
+# doesn't visibly affect the performance. Thus, we just build the main library
+# with this macro defined and use it for the unit testing.
+#
+c.poptions += -DHAVE_EXPAT_CONFIG_H -DXML_BUILDING_EXPAT -DXML_TESTING
 
 if! $msvc_runtime
   c.poptions += -DXML_ENABLE_VISIBILITY=1
 
 c.poptions =+ "-I$src_base"
+
+# Get rid of the "implicit declaration of function ‘arc4random_buf’" error,
+# which may appear when compile specifying the C99 standard explicitly, which
+# we do (see build/root.build for the reasoning).
+#
+if ($c.stdlib == 'glibc')
+  obj{xmlparse}: c.poptions += -D_GNU_SOURCE
 
 if ($c.class == 'gcc')
 {

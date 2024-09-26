@@ -10,20 +10,6 @@ $ ln -s ../../upstream/expat/lib/{*.{c,h},libexpat.def.cmake} ./
 $ ln -s ../../upstream/expat/expat_config.h.cmake expat_config.h.cmake.orig
 $ popd
 
-@@ TMP Note that the in module can't be used directly for libexpat.def.cmake
-       since the substitution variables we need to use start with the
-       underscore character, which ends up with the following error:
-
-       buildfile:28:3: error: variable name '_EXPAT_COMMENT_ATTR_INFO' is reserved
-         info: variable name starts with underscore
-
-       This can be fixed when the build2 version 0.16.0 is released, which
-       introduces the in.substitutions variable, which can be set to the list
-       of substitutions (key-value pairs).
-
-       For now we just copy libexpat.def.cmake to libexpat.def.in and patch it
-       manually, removing the leading underscores.
-
 Use some of the upstream's tests for testing:
 
 $ pushd unit-tests/regression/
@@ -39,8 +25,6 @@ introduced macros, comparing the already defined and currently used macro
 sets. Note that we can use this approach to also deduce the initial set of
 macros running the above commands for the upstream's auto-generated
 expat_config.h:
-
-$ ln -s ../../upstream/expat/expat_config.h.cmake libexpat/expat_config.h.cmake.orig
 
 $ for m in `cat libexpat/expat_config.h.cmake.orig libexpat/winconfig.h | \
             sed -n 's/.*#\s*\(define\|cmakedefine\)\s\{1,\}\([_a-zA-Z0-9]\{1,\}\)\(\s.*\)\{0,1\}$/\2/p' | sort -u`; do

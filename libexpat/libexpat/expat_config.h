@@ -53,9 +53,13 @@
 #  define HAVE_SYSCALL_GETRANDOM 1
 #endif
 
-/* Specific for FreeBSD and Mac OS.
+/* GNU libc added arc4random_buf() in version 2.36.
  */
-#if defined(__FreeBSD__) || defined(__APPLE__)
+#if defined(__FreeBSD__) || \
+    defined(__APPLE__)   || \
+    (defined(__GLIBC__)       && \
+     defined(__GLIBC_MINOR__) && \
+     (__GLIBC__  > 2 || __GLIBC__ == 2 && __GLIBC_MINOR__ >= 36))
 #  define HAVE_ARC4RANDOM_BUF 1
 #endif
 
@@ -69,6 +73,7 @@
  */
 #define XML_NS            1
 #define XML_DTD           1
+#define XML_GE            1
 #define XML_CONTEXT_BYTES 1024
 
 #undef XML_ATTR_INFO

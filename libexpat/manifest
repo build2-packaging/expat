@@ -1,6 +1,6 @@
 : 1
 name: libexpat
-version: 2.5.0+1
+version: 2.6.3-a.0.z
 project: expat
 priority: security
 summary: Stream-oriented XML parsing C library
@@ -15,8 +15,8 @@ email: packaging@build2.org ; Report issues at https://github.com/libexpat/libex
 package-email: packaging@build2.org ; Mailing list.
 build-warning-email: builds@build2.org
 builds: all
-depends: * build2 >= 0.13.0
-depends: * bpkg >= 0.13.0
+depends: * build2 >= 0.16.0
+depends: * bpkg >= 0.16.0
 
 # System package mapping.
 #
