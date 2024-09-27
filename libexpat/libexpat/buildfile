@@ -5,7 +5,7 @@
 # the compilation.
 #
 lib{expat}: h{*} c{* -xmltok_impl -xmltok_ns}
-lib{expat}: c{xmltok_impl xmltok_ns}: include = false
+lib{expat}: c{xmltok_impl xmltok_ns}: include = adhoc
 
 tclass = $c.target.class
 

@@ -1,6 +1,12 @@
 # file      : tests/build/root.build
 # license   : MIT; see accompanying COPYING file
 
+# Note that the regression test uses the 'for' loop initial declarations,
+# which may require an explicit specification of C99 standard for older GCC
+# versions (4.9, etc).
+#
+c.std = 99
+
 using c
 
 h{*}: extension = h
